@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Proposal Website</title>
+    <style>
+        body {
+            background: linear-gradient(135deg, #ffafbd, #ffc3a0);
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            overflow-x: hidden;
+            flex-direction: column;
+        }
+
+        .container {
+            text-align: center;
+            width: 80%;
+            max-width: 700px;
+            padding-top: 50px;
+        }
+
+        h1 {
+            color: #d676a6;
+            font-size: 2.5em;
+            font-weight: bold;
+        }
+
+        .question-box {
+            background-color: #f3a8d7;
+            margin: 25px 0;
+            padding: 25px;
+            border-radius: 15px;
+            font-size: 1.4em;
+            color: #333;
+            font-weight: bold;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .options {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            flex-wrap: wrap;
+            margin-top: 20px;
+        }
+
+        .option-btn, .textbox, .submit-btn {
+            background-color: #ff88b5;
+            padding: 12px 20px;
+            border-radius: 12px;
+            border: none;
+            color: white;
+            font-size: 1.1em;
+            cursor: pointer;
+            min-width: 40%;
+        }
+
+        .textbox {
+            font-size: 1.1em;
+            padding: 12px;
+            border-radius: 12px;
+            border: 2px solid #d0a6bf;
+            min-width: 40%;
+        }
+
+        .submit-btn {
+            background-color: #ff69b4;
+            margin-top: 15px;
+            font-size: 1.1em;
+            width: 90%;
+        }
+
+        .final-message {
+            display: none;
+            font-size: 2em;
+            color: #d676a6;
+            padding: 25px;
+            background-color: #fff;
+            border-radius: 15px;
+            text-align: center;
+            margin-top: 30px;
+        }
+
+        .response-box {
+            background-color: #fff0f5;
+            padding: 15px;
+            border-radius: 10px;
+            margin-top: 20px;
+            text-align: left;
+            font-size: 1.2em;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+    </style>
+</head>
+<body>
+
+    <div class="container" id="mainContainer">
+        <h1>Hey, Beautiful! 💖</h1>
+        <div class="question-box" id="questionBox">
+            <p>Preetuu! Are you ready to answer some fun questions? 😘</p>
+            <div class="options">
+                <button class="option-btn" onclick="startQuestions()">Yes, let's go! 💕</button>
+                <button class="option-btn" onclick="alert('You are too shy! 😅')">I am not sure... 😳</button>
+            </div>
+        </div>
+
+        <div class="final-message" id="finalMessage">
+            <p>Thank you for answering, Bacchu! ❤️</p>
+            <p>I love you soooo much! 😘</p>
+            <p>Will you be with me forever? 💍</p>
+            <div class="options">
+                <button class="option-btn" onclick="finalAnswer('Of course yes!')">Of course yes! ❤️</button>
+                <button class="option-btn" onclick="finalAnswer('Yes')">Yes 😶‍🌫️</button>
+                <button class="option-btn" onclick="finalAnswer('No')">No 🙃</button>
+            </div>
+            <button class="submit-btn" onclick="showResponses()">Submit</button>
+        </div>
+
+        <div class="response-box" id="responses" style="display:none;"></div>
+    </div>
+
+    <script>
+        let currentQuestion = 0;
+        const answers = [];
+        const questions = [
+            "Will you be my partner in crime? 💖",
+            "If we were animals, what would we be? 🐯🐻",
+            "How many kisses do you think we need in a day? 😘",
+            "What's the cutest thing I've ever done for you? 🥰",
+            "If I said I want to eat pizza every day, would you say yes? 🍕",
+            "Do you like when I call you cute names? 💕",
+            "What would be our favorite song together? 🎶",
+            "Would you like to live in a fairy tale world with me? 🏰",
+            "How many hugs do we need a day to stay happy? 🤗",
+            "Would you spend forever with me, even when I'm old and grey? 🧓💖"
+        ];
+
+        const options = [
+            ["Yes, definitely!", "Not sure, haha!", "Other..."],
+            ["Cat and dog duo!", "A lion and a tiger 🦁🐅", "Other..."],
+            ["A million kisses!", "Just a few for now", "Other..."],
+            ["When you surprised me with rose 🌹", "The way you make me smile", "Other..."],
+            ["Yes, we could have pizza every day!", "We need variety, haha!", "Other..."],
+            ["I love it!", "Sometimes, it's too much", "Other..."],
+            ["Chura Liya Hai Tumne Jo Dil ko by Asha Bhosle ", "Perfect by Ed Sheeran", "Other..."],
+            ["Absolutely, let's go! 🏰", "Only if you're with me", "Other..."],
+            ["10 hugs", "1 hugs, but lots of kisses", "Other..."],
+            ["Of course! I'll always love you 💖", "I don't know... that's a long time", "Other..."]
+        ];
+
+        function startQuestions() {
+            showQuestion(currentQuestion);
+        }
+
+        function showQuestion(index) {
+            const questionBox = document.getElementById('questionBox');
+            questionBox.innerHTML = `
+                <p>${questions[index]}</p>
+                <div class="options">
+                    <button class="option-btn" onclick="recordAnswer('${options[index][0]}')">${options[index][0]}</button>
+                    <button class="option-btn" onclick="recordAnswer('${options[index][1]}')">${options[index][1]}</button>
+                    <input type="text" class="textbox" id="answerText" placeholder="${options[index][2]}">
+                </div>
+                <button class="submit-btn" onclick="submitAnswer()">Submit Answer</button>
+            `;
+        }
+
+        function recordAnswer(option) {
+            document.getElementById('answerText').value = option;
+        }
+
+        function submitAnswer() {
+            const answerText = document.getElementById('answerText').value;
+            if (!answerText) {
+                alert("Please respond to the question before submitting.");
+                return;
+            }
+
+            answers.push(answerText);
+
+            if (currentQuestion < questions.length - 1) {
+                currentQuestion++;
+                setTimeout(() => showQuestion(currentQuestion), 1000);
+            } else {
+                showFinalMessage();
+            }
+        }
+
+        function showFinalMessage() {
+            document.getElementById('finalMessage').style.display = 'block';
+            document.getElementById('questionBox').style.display = 'none';
+        }
+
+        function finalAnswer(option) {
+            if (option === 'No') {
+                alert('I think you chose the wrong option 🙃');
+            } else if (option === 'Yes') {
+                alert('Only yes 😶‍🌫️');
+            } else if (option === 'Of course yes!') {
+                alert('Are you sure? 🥹');
+            }
+            answers.push(option);
+        }
+
+        function showResponses() {
+            const responseBox = document.getElementById('responses');
+            responseBox.style.display = 'block';
+            responseBox.innerHTML = `<h3>Your Responses:</h3>`;
+            answers.forEach((answer, index) => {
+                responseBox.innerHTML += `<p><strong>Q${index + 1}:</strong> ${answer}</p>`;
+            });
+            document.getElementById('finalMessage').style.display = 'none';
+        }
+    </script>
+</body>
+</html>
